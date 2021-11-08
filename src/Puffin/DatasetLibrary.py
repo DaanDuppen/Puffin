@@ -1,8 +1,8 @@
-from src.Puffin.Dataset import DataFrameDataset
-from src.Puffin.DatasetConfig import DatasetConfig
-from src.Puffin.enums import DatasetType
 from typing import List
-from src.Puffin.enums import DatasetType
+
+from Puffin.Dataset import DataFrameDataset
+from Puffin.DatasetConfig import DatasetConfig
+from Puffin.enums import VarType
 
 
 class DatasetLibrary:
@@ -16,14 +16,15 @@ class DatasetLibrary:
         for config in configs:
             self.add_dataset_config(config)
 
-    def load(self, config_name):
+    def load_df(self, config_name):
         config = self.select_config(config_name)
-        if config.type == DatasetType.file:
-            df_ds = DataFrameDataset()
-            df = df_ds.load_from_file(config)
-            return df
+        config.vartype = VarType.df
 
-    def save(self):
+        df_ds = DataFrameDataset(config)
+        df = df_ds.load_from_file()
+        return df
+
+    def save_df(self):
         pass
 
     def select_config(self, config_name):
